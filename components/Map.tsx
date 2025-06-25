@@ -62,9 +62,7 @@ const Map = ({setPinLocation} : Props) => {
                 coordinate={{latitude: pinCoords.lat, longitude: pinCoords.long}}
                 onDragEnd={(e) => handleCoordChange(e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude)}
                 isPreselected={true}
-                tracksViewChanges={false}
-            >
-            </Marker>
+                tracksViewChanges={false}/>
         </MapView>
     )
 }

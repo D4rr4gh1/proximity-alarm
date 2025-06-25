@@ -1,10 +1,10 @@
-import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import AlarmItem from '@/components/AlarmItem';
-import Button from '@/components/Button';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
 import { useEffect } from 'react';
 
 export default function HomeScreen() {
@@ -21,11 +21,11 @@ export default function HomeScreen() {
   return (
     <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
-            <Button 
-              url="/(create)/location" 
-              viewStyle={styles.buttonContainer}
-              textStyle={styles.buttonText}
-              label="+ New Alarm"/>
+            <Pressable
+              style={styles.buttonContainer}
+              onPress={() => router.push('/location')}>
+                <Text style={styles.buttonText}>+ New Alarm</Text>
+            </Pressable>
             <ScrollView>
                 <AlarmItem/>
                 <AlarmItem/>
