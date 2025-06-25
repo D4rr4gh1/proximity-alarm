@@ -1,8 +1,9 @@
-import React from 'react'
+import React from 'react';
+import { Text } from 'react-native';
 
 function ProximityScreen() {
   return (
-    <div>ProximityScreen</div>
+    <Text>ProximityScreen</Text>
   )
 }
 

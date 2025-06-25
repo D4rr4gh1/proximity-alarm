@@ -1,7 +1,7 @@
 import { useLocation } from '@/hooks/useLocation';
 import { LatLong } from '@/types/shared';
 import React, { useEffect, useState } from 'react';
-import { Platform, Text } from 'react-native';
+import { Platform, StyleSheet, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 interface Props {
@@ -61,9 +61,27 @@ const Map = ({setPinLocation} : Props) => {
             <Marker draggable
                 coordinate={{latitude: pinCoords.lat, longitude: pinCoords.long}}
                 onDragEnd={(e) => handleCoordChange(e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude)}
-            />
+                isPreselected={true}
+                tracksViewChanges={false}
+            >
+            </Marker>
         </MapView>
     )
 }
+
+const styles = StyleSheet.create({
+    customMarker: {
+    width: 200,
+    height: 200,
+    backgroundColor: 'red', // You can mimic the default pin or replace with an Image
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor: '#fff',
+  },
+    markerImage: {
+    width: 24,
+    height: 24,
+  },
+})
 
 export default Map

@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         marginVertical: 10,
         padding: 20,
-        width: 350,
+        width: '90%'
     },
     buttonText: {
         color: 'black',

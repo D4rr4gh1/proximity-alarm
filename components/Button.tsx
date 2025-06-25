@@ -1,12 +1,16 @@
 import { router } from 'expo-router';
 import React from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, StyleProp, Text, TextStyle, ViewStyle } from 'react-native';
 
 interface ButtonProps{
-    url: string
+    url: string;
+    viewStyle?: StyleProp<ViewStyle>;
+    textStyle?: StyleProp<TextStyle>;
+    label?: string;
+
 }
 
-const Button = ({ url } : ButtonProps) => {
+const Button = ({ url, viewStyle, textStyle, label = "Button" } : ButtonProps) => {
     const handlePress = () => {
         console.log('Pressed');
     };
@@ -16,29 +20,12 @@ const Button = ({ url } : ButtonProps) => {
 
     return (
         <Pressable
-            style={styles.buttonContainer}
+            style={viewStyle}
             onPressIn={handlePress}
             onPressOut={handleRelease}
             onPress={() => router.push(url as any)}>
-            <Text style={styles.buttonText}>+ New Alarm</Text>
+            <Text style={textStyle}>{label}</Text>
         </Pressable>
 )};
-
-const styles = StyleSheet.create({
-    buttonContainer: {
-        alignItems: 'center',
-        backgroundColor: '#3277D6',
-        borderRadius: 15,
-        marginHorizontal: 10,
-        marginTop: 30,
-        marginBottom: 10,
-        padding: 20,
-        width: 350
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 20,
-    },
-});
 
 export default Button;

@@ -4,11 +4,28 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AlarmItem from '@/components/AlarmItem';
 import Button from '@/components/Button';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react';
+
 export default function HomeScreen() {
+
+  const getSavedLoc = async () => {
+     const raw = await AsyncStorage.getItem('COORDS');
+     console.log(raw ? JSON.parse(raw) : "null")
+  }
+
+  useEffect(() => {
+    getSavedLoc();
+  })
+
   return (
     <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
-            <Button url="/(create)/location"/>
+            <Button 
+              url="/(create)/location" 
+              viewStyle={styles.buttonContainer}
+              textStyle={styles.buttonText}
+              label="+ New Alarm"/>
             <ScrollView>
                 <AlarmItem/>
                 <AlarmItem/>
@@ -31,4 +48,18 @@ const styles = StyleSheet.create({
     fontSize: 42,
     padding: 12,
   },
+  buttonContainer: {
+        alignItems: 'center',
+        backgroundColor: '#3277D6',
+        borderRadius: 15,
+        marginHorizontal: 10,
+        marginTop: 30,
+        marginBottom: 10,
+        padding: 20,
+        width: '90%'
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 20,
+    },
 });
