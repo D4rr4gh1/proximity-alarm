@@ -1,25 +1,40 @@
 import { useLocation } from '@/hooks/useLocation';
+import { LatLong } from '@/types/shared';
 import React, { useEffect, useState } from 'react';
 import { Platform, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
-interface LatLong {
-    lat: number,
-    long: number,
+interface Props {
+    setPinLocation: (coords: LatLong) => void
 }
 
-const Map = () => {
+const Map = ({setPinLocation} : Props) => {
     const { location, errorMsg } = useLocation();
     const [ pinCoords, setPinCoords ] = useState<LatLong>();
 
-     useEffect(() => {
-    if (location && !pinCoords) {
-      setPinCoords({
-        lat: location.coords.latitude,
-        long: location.coords.longitude,
-      });
+    useEffect(() => {
+        if (location && !pinCoords) {
+        setPinCoords({
+            lat: location.coords.latitude,
+            long: location.coords.longitude,
+        });
+        setPinLocation({
+            lat: location.coords.latitude,
+            long: location.coords.longitude,
+        })
+        }
+    }, [location]);
+
+    const handleCoordChange = (givenLat: number, givenLong: number) => {
+        setPinCoords({
+            lat: givenLat,
+            long: givenLong,
+        });
+        setPinLocation({
+            lat: givenLat,
+            long: givenLong,
+        })
     }
-  }, [location]);
 
     if (errorMsg) return <Text>Error: {errorMsg}</Text>;
     if (!location) return <Text>Loading...</Text>;
@@ -40,11 +55,12 @@ const Map = () => {
                     longitude: location.coords.longitude,
                     latitudeDelta: 0.0322,
                     longitudeDelta: 0.0221,
-                }}>
+                }}
+                onPress={(e) => handleCoordChange(e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude)}>
 
             <Marker draggable
                 coordinate={{latitude: pinCoords.lat, longitude: pinCoords.long}}
-                onDragEnd={(e) => setPinCoords({ lat: e.nativeEvent.coordinate.latitude, long: e.nativeEvent.coordinate.longitude})}
+                onDragEnd={(e) => handleCoordChange(e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude)}
             />
         </MapView>
     )

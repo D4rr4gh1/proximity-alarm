@@ -1,13 +1,17 @@
 import Map from '@/components/Map';
-import React from 'react';
+import { LatLong } from '@/types/shared';
+import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 function LocationScreen() {
+  const [pinLocation, setPinLocation] = useState<LatLong>()
+
+  console.log(`From loc screen pin is ${pinLocation}`)
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <Map/>
+        <Map setPinLocation={setPinLocation}/>
       </SafeAreaView>
     </SafeAreaProvider>
   )
