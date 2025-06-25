@@ -1,12 +1,13 @@
+import Map from '@/components/Map';
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 function LocationScreen() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-          <Text>Set Location</Text>
+        <Map/>
       </SafeAreaView>
     </SafeAreaProvider>
   )
@@ -17,6 +18,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  map: {
+    width: '100%',
+    height:'100%',
   },
 });
 
