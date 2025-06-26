@@ -44,22 +44,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-    text: {
+  text: {
     fontSize: 42,
     padding: 12,
   },
   buttonContainer: {
-        alignItems: 'center',
-        backgroundColor: '#3277D6',
-        borderRadius: 15,
-        marginHorizontal: 10,
-        marginTop: 30,
-        marginBottom: 10,
-        padding: 20,
-        width: '90%'
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 20,
-    },
+    alignItems: 'center',
+    backgroundColor: '#3277D6',
+    borderRadius: 15,
+    marginHorizontal: 10,
+    marginTop: 30,
+    marginBottom: 10,
+    padding: 20,
+    width: '90%'
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20,
+  },
 });

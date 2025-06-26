@@ -9,11 +9,6 @@ import MapView, { Circle, Marker } from 'react-native-maps';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 function ProximityScreen() {
-  const handlePress = async () => {
-    //await AsyncStorage.setItem('RADIUS', String(radius));
-    router.push('/options')
-  }
-
   const pinLocation = useRef<LatLong>({lat: 0.0, long: 0.0})
   const [alarmRadius, setAlarmRadius] = useState(1000)
   const [ready, setReady] = useState(false);
@@ -36,6 +31,11 @@ function ProximityScreen() {
 
     getSavedLoc();
   }, []);
+
+  const handlePress = async () => {
+    await AsyncStorage.setItem('RADIUS', String(alarmRadius));
+    router.push('/options')
+  }
 
   if (!ready) {
     return <Text>Loading...</Text>;
