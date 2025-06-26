@@ -1,13 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, ScrollView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 function OptionsScreen() {
-  const [vibrate, setVibrate] = useState(false)
-  const [repeat, setRepeat] = useState(false)
-  const [label, setLabel] = useState('Home Arrival')
-  const [alarmSound, setAlarmSound] = useState('Default')
+  const [vibrate, setVibrate] = useState(false);
+  const [repeat, setRepeat] = useState(false);
+  const [label, setLabel] = useState('Home Arrival');
+  const [alarmSound, setAlarmSound] = useState('Default');
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleSave = async () => {
     var coords;
@@ -30,7 +31,7 @@ function OptionsScreen() {
     }
 
   const handleAlarmSoundPress = () => {
-
+    setModalVisible(!modalVisible)
   }
 
   const handleLabelPress = () => {
@@ -43,6 +44,29 @@ function OptionsScreen() {
       <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollArea} contentContainerStyle={styles.contentContainer}>
         <Text style={styles.header}>Set Alarm Options</Text>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <TextInput
+                style={styles.input}
+                onChangeText={setAlarmSound}
+                value={alarmSound}
+                placeholder={alarmSound}/>
+              <TouchableOpacity
+                style={[styles.saveButton ]}
+                onPress={() => setModalVisible(!modalVisible) }>
+                <Text style={styles.saveButtonText}>Hide Modal</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
 
         {/* Alarm Sound */}
         <TouchableOpacity style={styles.optionRow} onPress={handleAlarmSoundPress}>
@@ -147,6 +171,36 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
   },
 });
 
