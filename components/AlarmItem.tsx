@@ -1,11 +1,17 @@
+import { Alarm } from '@/contexts/context';
 import React from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, ViewProps } from 'react-native';
 
-const AlarmItem = () => {
+interface AlarmItemProps extends ViewProps{
+    alarm: Alarm
+}
+
+
+const AlarmItem = ({ alarm }: AlarmItemProps) => {
   return (
-    <Pressable style={styles.buttonContainer}>
-        <Text style={styles.buttonText}>AlarmItem</Text>
-    </Pressable>
+    <TouchableOpacity style={styles.buttonContainer}>
+        <Text style={styles.buttonText}>{alarm.sound}</Text>
+    </TouchableOpacity>
   )
 }
 

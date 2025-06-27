@@ -1,5 +1,7 @@
 import OptionsModal from '@/components/OptionsModal';
+import { useDBContext } from '@/contexts/context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -11,37 +13,42 @@ function OptionsScreen() {
   const [alarmSound, setAlarmSound] = useState('Default');
   const [alarmModalVisible, setAlarmModalVisible] = useState(false);
   const [labelModalVisible, setLabelModalVisible] = useState(false);
+  const db = useDBContext();
 
 
-  const handleSave = async () => {
-    var coords;
-    var radius;
+ const handleSave = async () => {
     try {
         const storedCoords = await AsyncStorage.getItem('COORDS');
         const storedRadius = await AsyncStorage.getItem('RADIUS');
         if (storedCoords && storedRadius) {
-          coords = JSON.parse(storedCoords);
-          radius = parseInt(storedRadius)
+          const radius = parseInt(storedRadius);
 
-          console.log('Loaded pin location:', coords, ' & radius:', radius);
+          if(isNaN(radius)){
+            console.warn("Invalid Radius: ", storedRadius);
+            return;
+          }
+
+          db.addAlarm(alarmSound, label, vibrate, repeat, storedCoords, radius);
+          await AsyncStorage.removeItem('COORDS')
+          await AsyncStorage.removeItem('RADIUS')
+          router.push('/')
         }
-      } catch (e) {
+        else {
+          console.warn('Failed to load coords or radius.');
+        }
+    } catch (e) {
         console.error('Failed to load coords or radius:', e);
-      } finally {
-        // GO ABOUT STORING ALL THE VALUES FROM HERE
-        // Unset from asyncstorage
-        // setReady(true);
       }
-    }
+  } 
 
   const handleAlarmSoundPress = () => {
-    setLabelModalVisible(false)
-    setAlarmModalVisible(!alarmModalVisible)
+    setLabelModalVisible(false);
+    setAlarmModalVisible(!alarmModalVisible);
   }
 
   const handleLabelPress = () => {
-    setAlarmModalVisible(false)
-    setLabelModalVisible(!labelModalVisible)
+    setAlarmModalVisible(false);
+    setLabelModalVisible(!labelModalVisible);
   }
 
 
@@ -50,27 +57,6 @@ function OptionsScreen() {
       <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollArea} contentContainerStyle={styles.contentContainer}>
         <Text style={styles.header}>Set Alarm Options</Text>
-          {/* <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}>
-            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <TextInput
-                  style={styles.inputBox}
-                  onEndEditing={(e) => {setTempLabel(e.nativeEvent.text)}}
-                  placeholder={alarmSound}/>
-                <TouchableOpacity
-                  style={styles.saveButton}
-                  onPress={() => { setModalVisible(!modalVisible); setAlarmSound(tempLabel) }}>
-                  <Text style={styles.saveButtonText}>Hide Modal</Text>
-                </TouchableOpacity>
-              </View>
-            </KeyboardAvoidingView>
-          </Modal> */}
         
           <OptionsModal
             setModalVisible={setAlarmModalVisible}
@@ -137,6 +123,7 @@ function OptionsScreen() {
     </SafeAreaProvider>
   )
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -228,4 +215,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OptionsScreen 
+export default OptionsScreen;

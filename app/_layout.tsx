@@ -1,3 +1,4 @@
+import DBContextProvider from '@/contexts/dbContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 import { Stack } from "expo-router";
@@ -62,9 +63,11 @@ export default function RootLayout() {
 
   }, []);
   return(
-    <Stack screenOptions={{ headerShown: false}}>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-    </Stack>
+    <DBContextProvider>
+      <Stack screenOptions={{ headerShown: false}}>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+      </Stack>
+    </DBContextProvider>
 
   );
 }

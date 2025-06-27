@@ -1,36 +1,35 @@
-import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import AlarmItem from '@/components/AlarmItem';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDBContext } from '@/contexts/context';
 import { router } from 'expo-router';
 import { useEffect } from 'react';
 
-export default function HomeScreen() {
 
-  const getSavedLoc = async () => {
-     const raw = await AsyncStorage.getItem('COORDS');
-     console.log(raw ? JSON.parse(raw) : "null")
-  }
+export default function HomeScreen() {
+  const db = useDBContext();
 
   useEffect(() => {
-    getSavedLoc();
-  })
+    db.fetchAlarms();
+    db.alarms.forEach(alarm => {
+      console.log(alarm.coords, alarm.label, alarm.sound);
+    });
+  }, [])
 
   return (
     <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
-            <Pressable
+            <TouchableOpacity
               style={styles.buttonContainer}
               onPress={() => router.push('/location')}>
                 <Text style={styles.buttonText}>+ New Alarm</Text>
-            </Pressable>
+            </TouchableOpacity>
             <ScrollView>
-                <AlarmItem/>
-                <AlarmItem/>
-                <AlarmItem/>
-                <AlarmItem/>
+              {db.alarms.map((alarm) => (
+                <AlarmItem key={alarm.id} alarm={alarm}/>
+              ))}
             </ScrollView>
         </SafeAreaView>
     </SafeAreaProvider>
