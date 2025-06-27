@@ -1,6 +1,7 @@
 import { Alarm } from '@/contexts/context';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, ViewProps } from 'react-native';
+import { StyleSheet, Text, View, ViewProps } from 'react-native';
+import RingIndicator from './RingIndicator';
 
 interface AlarmItemProps extends ViewProps{
     alarm: Alarm
@@ -8,30 +9,35 @@ interface AlarmItemProps extends ViewProps{
 
 
 const AlarmItem = ({ alarm }: AlarmItemProps) => {
+
   return (
-    <TouchableOpacity style={styles.buttonContainer}>
+    <View style={styles.buttonContainer}>
+        <RingIndicator active={alarm.active} id={alarm.id}/>
         <Text style={alarm.active ? styles.activeText : styles.buttonText}>{alarm.sound}</Text>
-    </TouchableOpacity>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
     buttonContainer: {
-        alignItems: 'center',
         backgroundColor: '#FFFFFF',
         borderRadius: 10,
         marginHorizontal: 10,
         marginVertical: 10,
         padding: 20,
-        width: '90%'
+        width: '90%',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        height: 120
     },
     buttonText: {
         color: 'black',
-        fontSize: 20
+        fontSize: 36
     },
     activeText: {
         color: 'green',
-        fontSize: 20
+        fontSize: 36
     }
 })
 

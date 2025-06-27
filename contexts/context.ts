@@ -21,6 +21,8 @@ interface DBContextType {
     radius: number) => void;
     deleteAlarm: (id: number) => void;
     fetchAlarms: () => void;
+    turnAlarmOff: (id: number, flip: boolean) => void;
+    dbVersion: number;
 
 }
 

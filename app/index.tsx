@@ -13,7 +13,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     db.fetchAlarms();
-  }, [])
+  }, [db.dbVersion])
 
   return (
     <SafeAreaProvider>
@@ -23,7 +23,7 @@ export default function HomeScreen() {
               onPress={() => router.push('/location')}>
                 <Text style={styles.buttonText}>+ New Alarm</Text>
             </TouchableOpacity>
-            <ScrollView>
+            <ScrollView contentContainerStyle={{alignItems: 'center'}} style={styles.itemsContainer}>
               {db.alarms.map((alarm) => (
                 <AlarmItem key={alarm.id} alarm={alarm}/>
               ))}
@@ -58,4 +58,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
   },
+  itemsContainer: {
+    width: '100%'
+  }
 });

@@ -12,6 +12,8 @@ interface DBProviderProps {
 function DBContextProvider({children} : DBProviderProps) {
     const [alarms, setAlarms] = useState<Alarm[]>([])
     const [db, setDB] = useState<SQLite.SQLiteDatabase | null>(null)
+    const [dbVersion, setDBVersion] = useState(0);
+
 
     useEffect(() => {
         const setupDB = async () => {
@@ -41,7 +43,7 @@ function DBContextProvider({children} : DBProviderProps) {
             console.error("Error creating table:", e);
         }
     }
-    
+
     if (!db) return null;
 
     const fetchAlarms = async () => {
@@ -59,6 +61,7 @@ function DBContextProvider({children} : DBProviderProps) {
             const result = await db.runAsync('INSERT INTO alarms (label, sound, vibrate, repeat, coords, radius, active) VALUES (?, ?, ?, ?, ?, ?, ?)', 
                 label, sound, vibrate, repeat, coords, radius, true);
             console.log(result.lastInsertRowId, result.changes);
+            setDBVersion(prev => prev + 1);
         } catch (e) {
             console.error("Error when adding to database: ", e);
         }
@@ -69,13 +72,23 @@ function DBContextProvider({children} : DBProviderProps) {
     const deleteAlarm = async (id: number) => {
         try{
             await db.runAsync('DELETE FROM alarms WHERE id = ?', id);
+            setDBVersion(prev => prev + 1);
         } catch (e) {
             console.error("Error when deleting from database: ", e);
         }
     }
 
+    const turnAlarmOff = async (id: number, flip: boolean) => {
+        try{
+            await db.runAsync('UPDATE alarms SET active = ? WHERE id = ?', flip, id)
+            setDBVersion(prev => prev + 1);
+        } catch (e) {
+            console.error("Error when turning alarm On/Off: ", e);
+        }
+    }
+
   return (
-    <DBContext.Provider value={{alarms, addAlarm, fetchAlarms, deleteAlarm}}>
+    <DBContext.Provider value={{alarms, addAlarm, fetchAlarms, deleteAlarm, turnAlarmOff, dbVersion}}>
         {children}
     </DBContext.Provider>
   )
