@@ -1,6 +1,7 @@
+import OptionsModal from '@/components/OptionsModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 function OptionsScreen() {
@@ -8,8 +9,9 @@ function OptionsScreen() {
   const [repeat, setRepeat] = useState(false);
   const [label, setLabel] = useState('Home Arrival');
   const [alarmSound, setAlarmSound] = useState('Default');
-  const [modalVisible, setModalVisible] = useState(false);
-  const [tempLabel, setTempLabel] = useState('')
+  const [alarmModalVisible, setAlarmModalVisible] = useState(false);
+  const [labelModalVisible, setLabelModalVisible] = useState(false);
+
 
   const handleSave = async () => {
     var coords;
@@ -21,22 +23,25 @@ function OptionsScreen() {
           coords = JSON.parse(storedCoords);
           radius = parseInt(storedRadius)
 
-          console.log('Loaded pin location:', coords);
+          console.log('Loaded pin location:', coords, ' & radius:', radius);
         }
       } catch (e) {
         console.error('Failed to load coords or radius:', e);
       } finally {
         // GO ABOUT STORING ALL THE VALUES FROM HERE
+        // Unset from asyncstorage
         // setReady(true);
       }
     }
 
   const handleAlarmSoundPress = () => {
-    setModalVisible(!modalVisible)
+    setLabelModalVisible(false)
+    setAlarmModalVisible(!alarmModalVisible)
   }
 
   const handleLabelPress = () => {
-
+    setAlarmModalVisible(false)
+    setLabelModalVisible(!labelModalVisible)
   }
 
 
@@ -45,7 +50,7 @@ function OptionsScreen() {
       <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollArea} contentContainerStyle={styles.contentContainer}>
         <Text style={styles.header}>Set Alarm Options</Text>
-          <Modal
+          {/* <Modal
             animationType="slide"
             transparent={true}
             visible={modalVisible}
@@ -65,7 +70,23 @@ function OptionsScreen() {
                 </TouchableOpacity>
               </View>
             </KeyboardAvoidingView>
-          </Modal>
+          </Modal> */}
+        
+          <OptionsModal
+            setModalVisible={setAlarmModalVisible}
+            modalVisible={alarmModalVisible}
+            setOption={setAlarmSound}
+            placeholder={alarmSound}
+          />
+
+          <OptionsModal
+            setModalVisible={setLabelModalVisible}
+            modalVisible={labelModalVisible}
+            setOption={setLabel}
+            placeholder={label}
+          />
+          
+          
 
         {/* Alarm Sound */}
         <TouchableOpacity style={styles.optionRow} onPress={handleAlarmSoundPress}>
