@@ -8,6 +8,7 @@ export type Alarm = {
     repeat: boolean;
     coords: string;
     radius: number;
+    active: boolean;
 }
 
 interface DBContextType {

@@ -10,7 +10,7 @@ interface AlarmItemProps extends ViewProps{
 const AlarmItem = ({ alarm }: AlarmItemProps) => {
   return (
     <TouchableOpacity style={styles.buttonContainer}>
-        <Text style={styles.buttonText}>{alarm.sound}</Text>
+        <Text style={alarm.active ? styles.activeText : styles.buttonText}>{alarm.sound}</Text>
     </TouchableOpacity>
   )
 }
@@ -27,6 +27,10 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'black',
+        fontSize: 20
+    },
+    activeText: {
+        color: 'green',
         fontSize: 20
     }
 })

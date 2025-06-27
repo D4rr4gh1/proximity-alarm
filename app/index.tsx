@@ -13,9 +13,6 @@ export default function HomeScreen() {
 
   useEffect(() => {
     db.fetchAlarms();
-    db.alarms.forEach(alarm => {
-      console.log(alarm.coords, alarm.label, alarm.sound);
-    });
   }, [])
 
   return (

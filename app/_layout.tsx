@@ -1,4 +1,4 @@
-import DBContextProvider from '@/contexts/dbContext';
+import DBContextProvider from '@/hooks/useDBContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 import { Stack } from "expo-router";

@@ -1,6 +1,6 @@
 import * as SQLite from 'expo-sqlite';
 import { ReactNode, useEffect, useState } from "react";
-import { Alarm, DBContext } from "./context";
+import { Alarm, DBContext } from "../contexts/context";
 
 
 import React from 'react';
@@ -35,7 +35,8 @@ function DBContextProvider({children} : DBProviderProps) {
                         vibrate BOOL NOT NULL,
                         repeat BOOL NOT NULL,
                         coords TEXT NOT NULL,
-                        radius INTEGER);`);
+                        radius INTEGER NOT NULL,
+                        active BOOL NOT NULL);`);
         } catch (e) {
             console.error("Error creating table:", e);
         }
@@ -54,16 +55,23 @@ function DBContextProvider({children} : DBProviderProps) {
             repeat: boolean,
             coords: string,
             radius: number) => {
+        try{ 
+            const result = await db.runAsync('INSERT INTO alarms (label, sound, vibrate, repeat, coords, radius, active) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+                label, sound, vibrate, repeat, coords, radius, true);
+            console.log(result.lastInsertRowId, result.changes);
+        } catch (e) {
+            console.error("Error when adding to database: ", e);
+        }
 
-        const result = await db.runAsync('INSERT INTO alarms (label, sound, vibrate, repeat, coords, radius) VALUES (?, ?, ?, ?, ?, ?)', 
-            label, sound, vibrate, repeat, coords, radius);
-
-        console.log(result.lastInsertRowId, result.changes);
 
     }
 
     const deleteAlarm = async (id: number) => {
-        await db.runAsync('DELETE FROM alarms WHERE id = ?', id); 
+        try{
+            await db.runAsync('DELETE FROM alarms WHERE id = ?', id);
+        } catch (e) {
+            console.error("Error when deleting from database: ", e);
+        }
     }
 
   return (
