@@ -15,7 +15,7 @@ interface AlarmItemProps extends ViewProps{
 
 const AlarmItem = ({ alarm, location }: AlarmItemProps) => {
 
-    const player = useAudioPlayer(alarmSounds['Classic']);
+    const player = useAudioPlayer(alarmSounds[alarm.sound]);
 
     const parsed = JSON.parse(alarm.coords);
     console.log('Loaded pin location:', parsed['lat']);

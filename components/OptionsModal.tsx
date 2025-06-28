@@ -1,3 +1,4 @@
+import { alarmSounds } from '@/assets/alarmsounds';
 import { Picker } from '@react-native-picker/picker';
 import React, { SetStateAction, useState } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -40,7 +41,7 @@ const OptionsModal = ({setModalVisible, modalVisible, setOption, placeholder, in
               
 
           :
-          
+
             <View style={{justifyContent: 'center', flex: 1}}>
                 <View style={styles.modalView}>
                   <View style={{ height: 300, width: '100%' }}>
@@ -50,16 +51,14 @@ const OptionsModal = ({setModalVisible, modalVisible, setOption, placeholder, in
                     onValueChange={(itemValue, itemIndex) =>
                       setSelectedSound(itemValue)
                     }>
-                      {/* {Object.keys(alarmSounds).map((name, index) => (
+                      {Object.keys(alarmSounds).map((name, index) => (
                         <Picker.Item key={index} label={name} value={name}/>
-                      ))} */}
-                      <Picker.Item label="test" value="test"/>
-                      
+                      ))}               
                     </Picker>
                   </View>
                 <TouchableOpacity
                   style={styles.saveButton}
-                  onPress={() => { setModalVisible(!modalVisible); setOption(tempLabel) }}>
+                  onPress={() => { setModalVisible(!modalVisible); setOption(selectedSound) }}>
                   <Text style={styles.saveButtonText}>Hide Modal</Text>
                 </TouchableOpacity>
                 </View>

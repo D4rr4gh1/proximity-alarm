@@ -24,6 +24,7 @@ export default function RootLayout() {
 
     const startBackgroundTask = async () => {
         // Start by seeing if we have already set up background location stuff
+
         try {
           const alreadyStarted = await AsyncStorage.getItem('BACKGROUND_TRACKING_STARTED');
           if (alreadyStarted) {
