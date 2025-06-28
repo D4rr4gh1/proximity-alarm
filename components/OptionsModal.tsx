@@ -1,6 +1,6 @@
+import { Picker } from '@react-native-picker/picker';
 import React, { SetStateAction, useState } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
 
 interface OptionsModalProps{
     setModalVisible: React.Dispatch<SetStateAction<boolean>>;
@@ -13,6 +13,7 @@ interface OptionsModalProps{
 
 const OptionsModal = ({setModalVisible, modalVisible, setOption, placeholder, inputType} : OptionsModalProps) => {
   const [tempLabel, setTempLabel] = useState('')
+  const [selectedSound, setSelectedSound] = useState('Classic');
   return (
     <Modal
         animationType="slide"
@@ -21,24 +22,61 @@ const OptionsModal = ({setModalVisible, modalVisible, setOption, placeholder, in
         onRequestClose={() => {
             setModalVisible(!modalVisible);
         }}>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.centeredView}>
-            <View style={styles.modalView}>
-            <TextInput
-                style={styles.inputBox}
-                onEndEditing={(e) => {setTempLabel(e.nativeEvent.text)}}
-                placeholder={placeholder}/>
-            <TouchableOpacity
-                style={styles.saveButton}
-                onPress={() => { setModalVisible(!modalVisible); setOption(tempLabel) }}>
-                <Text style={styles.saveButtonText}>Hide Modal</Text>
-            </TouchableOpacity>
+        {inputType === 'Type' ?
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <TextInput
+                  style={styles.inputBox}
+                  onEndEditing={(e) => {setTempLabel(e.nativeEvent.text)}}
+                  placeholder={placeholder}/>
+
+                <TouchableOpacity
+                  style={styles.saveButton}
+                  onPress={() => { setModalVisible(!modalVisible); setOption(tempLabel) }}>
+                  <Text style={styles.saveButtonText}>Hide Modal</Text>
+                </TouchableOpacity>
+              </View>
+            </KeyboardAvoidingView>
+              
+
+          :
+          
+            <View style={{justifyContent: 'center', flex: 1}}>
+                <View style={styles.modalView}>
+                  <View style={{ height: 300, width: '100%' }}>
+                    <Picker
+                    style={{color: 'black', width: '100%', flex: 1 }}
+                    selectedValue={selectedSound}
+                    onValueChange={(itemValue, itemIndex) =>
+                      setSelectedSound(itemValue)
+                    }>
+                      {/* {Object.keys(alarmSounds).map((name, index) => (
+                        <Picker.Item key={index} label={name} value={name}/>
+                      ))} */}
+                      <Picker.Item label="test" value="test"/>
+                      
+                    </Picker>
+                  </View>
+                <TouchableOpacity
+                  style={styles.saveButton}
+                  onPress={() => { setModalVisible(!modalVisible); setOption(tempLabel) }}>
+                  <Text style={styles.saveButtonText}>Hide Modal</Text>
+                </TouchableOpacity>
+                </View>
             </View>
-        </KeyboardAvoidingView>
+              }
     </Modal>
+
+    
   )
 }
 
 const styles = StyleSheet.create({
+    container: {
+    flex: 1,
+    backgroundColor: 'gray',
+    justifyContent: 'center',
+  },
   modalView: {
     margin: 20,
     backgroundColor: 'white',
@@ -53,7 +91,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    maxWidth: 'auto',
+    maxWidth: 'auto'
   },
   modalText: {
     marginBottom: 15,

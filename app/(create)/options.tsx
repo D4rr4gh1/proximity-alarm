@@ -71,7 +71,7 @@ function OptionsScreen() {
             modalVisible={labelModalVisible}
             setOption={setLabel}
             placeholder={label}
-            inputType='Select'
+            inputType='Type'
           />
           
           
