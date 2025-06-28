@@ -10,7 +10,7 @@ function OptionsScreen() {
   const [vibrate, setVibrate] = useState(false);
   const [repeat, setRepeat] = useState(false);
   const [label, setLabel] = useState('Home Arrival');
-  const [alarmSound, setAlarmSound] = useState('Default');
+  const [alarmSound, setAlarmSound] = useState('Classic');
   const [alarmModalVisible, setAlarmModalVisible] = useState(false);
   const [labelModalVisible, setLabelModalVisible] = useState(false);
   const db = useDBContext();
@@ -63,6 +63,7 @@ function OptionsScreen() {
             modalVisible={alarmModalVisible}
             setOption={setAlarmSound}
             placeholder={alarmSound}
+            inputType='Select'
           />
 
           <OptionsModal
@@ -70,6 +71,7 @@ function OptionsScreen() {
             modalVisible={labelModalVisible}
             setOption={setLabel}
             placeholder={label}
+            inputType='Select'
           />
           
           

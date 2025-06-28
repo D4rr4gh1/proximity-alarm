@@ -43,7 +43,9 @@
     "expo-task-manager": "~13.1.5",
     "expo-sqlite": "~15.2.12",
     "@react-native-async-storage/async-storage": "2.1.2",
-    "@react-native-community/slider": "4.5.6"
+    "@react-native-community/slider": "4.5.6",
+    "expo-audio": "~0.4.7",
+    "@react-native-picker/picker": "2.11.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

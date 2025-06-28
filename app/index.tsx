@@ -4,16 +4,22 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AlarmItem from '@/components/AlarmItem';
 
 import { useDBContext } from '@/contexts/context';
+import { useLocation } from '@/hooks/useLocation';
 import { router } from 'expo-router';
 import { useEffect } from 'react';
 
 
 export default function HomeScreen() {
+  const { location, errorMsg } = useLocation();
   const db = useDBContext();
 
   useEffect(() => {
     db.fetchAlarms();
   }, [db.dbVersion])
+
+  if (errorMsg) return <Text>Error: {errorMsg}</Text>;
+  if (!location) return <Text>Loading...</Text>;
+  console.log("LOADED HOME")
 
   return (
     <SafeAreaProvider>
@@ -25,7 +31,7 @@ export default function HomeScreen() {
             </TouchableOpacity>
             <ScrollView contentContainerStyle={{alignItems: 'center'}} style={styles.itemsContainer}>
               {db.alarms.map((alarm) => (
-                <AlarmItem key={alarm.id} alarm={alarm}/>
+                <AlarmItem key={alarm.id} alarm={alarm} location={location}/>
               ))}
             </ScrollView>
         </SafeAreaView>

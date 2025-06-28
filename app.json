@@ -4,7 +4,6 @@
     "slug": "proximity-alarm",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
     "scheme": "proximityalarm",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -17,9 +16,7 @@
           "location",
           "fetch",
           "remote-notification",
-          "location",
-          "fetch",
-          "remote-notification"
+          "audio"
         ],
         "ITSAppUsesNonExemptEncryption": false
       },
@@ -27,15 +24,13 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "output": "static"
     },
     "plugins": [
       "expo-router",
@@ -48,7 +43,8 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-audio"
     ],
     "experiments": {
       "typedRoutes": true

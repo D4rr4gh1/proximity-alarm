@@ -7,10 +7,11 @@ interface OptionsModalProps{
     modalVisible: boolean
     setOption: React.Dispatch<SetStateAction<string>>;
     placeholder: string
+    inputType: string
 }
 
 
-const OptionsModal = ({setModalVisible, modalVisible, setOption, placeholder} : OptionsModalProps) => {
+const OptionsModal = ({setModalVisible, modalVisible, setOption, placeholder, inputType} : OptionsModalProps) => {
   const [tempLabel, setTempLabel] = useState('')
   return (
     <Modal
