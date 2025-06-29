@@ -1,7 +1,8 @@
 import { alarmSounds } from '@/assets/alarmsounds';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
 import React, { SetStateAction, useState } from 'react';
-import { KeyboardAvoidingView, Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 interface OptionsModalProps{
     setModalVisible: React.Dispatch<SetStateAction<boolean>>;
@@ -26,6 +27,9 @@ const OptionsModal = ({setModalVisible, modalVisible, setOption, placeholder, in
         {inputType === 'Type' ?
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.centeredView}>
               <View style={styles.modalView}>
+                <Pressable style={{ position: 'absolute', left: '4%', top: '10%'}} onPress={() => setModalVisible(!modalVisible) }>
+                  <Ionicons name="close" size={32} color="grey"/>
+                </Pressable>
                 <TextInput
                   style={styles.inputBox}
                   onEndEditing={(e) => {setTempLabel(e.nativeEvent.text)}}
@@ -44,6 +48,9 @@ const OptionsModal = ({setModalVisible, modalVisible, setOption, placeholder, in
 
             <View style={{justifyContent: 'center', flex: 1}}>
                 <View style={styles.modalView}>
+                  <Pressable style={{ position: 'absolute', left: '6%', top: '8%'}} onPress={() => setModalVisible(!modalVisible) }>
+                    <Ionicons name="close" size={32} color="grey"/>
+                  </Pressable>
                   <View style={{ height: 300, width: '100%' }}>
                     <Picker
                     style={{color: 'black', width: '100%', flex: 1 }}
