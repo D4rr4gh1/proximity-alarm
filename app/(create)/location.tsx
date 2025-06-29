@@ -4,8 +4,8 @@ import { LatLong } from '@/types/shared';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+
 
 function LocationScreen() {
   const [pinLocation, setPinLocation] = useState<LatLong>()
@@ -15,8 +15,9 @@ function LocationScreen() {
     router.push('/proximity')
   }
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
+    // <SafeAreaProvider>
+    //   <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
         <Map setPinLocation={setPinLocation}/>
         <BackArrow/>
         <Pressable
@@ -24,8 +25,9 @@ function LocationScreen() {
           onPress={handlePress}>
             <Text style={styles.buttonText}>Next</Text>
           </Pressable>
-      </SafeAreaView>
-    </SafeAreaProvider>
+    </View>
+    //   </SafeAreaView>
+    // </SafeAreaProvider>
   )
 }
 

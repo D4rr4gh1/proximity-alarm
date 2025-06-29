@@ -6,7 +6,6 @@ import { router } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import MapView, { Circle, Marker } from 'react-native-maps';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 function ProximityScreen() {
   const pinLocation = useRef<LatLong>({lat: 0.0, long: 0.0})
@@ -44,8 +43,7 @@ function ProximityScreen() {
   if (!pinLocation) return <Text>Loading...</Text>;
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <MapView style = {{ 
                     width: '100%',
                     height: '100%',
@@ -101,8 +99,7 @@ function ProximityScreen() {
             </Pressable>
           </View>
         </View>
-      </SafeAreaView>
-    </SafeAreaProvider>
+      </View>
   )
 }
 
