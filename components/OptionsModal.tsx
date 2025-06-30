@@ -8,12 +8,11 @@ interface OptionsModalProps{
     setModalVisible: React.Dispatch<SetStateAction<boolean>>;
     modalVisible: boolean
     setOption: React.Dispatch<SetStateAction<string>>;
-    placeholder: string
     inputType: string
 }
 
 
-const OptionsModal = ({setModalVisible, modalVisible, setOption, placeholder, inputType} : OptionsModalProps) => {
+const OptionsModal = ({setModalVisible, modalVisible, setOption, inputType} : OptionsModalProps) => {
   const [tempLabel, setTempLabel] = useState('')
   const [selectedSound, setSelectedSound] = useState('Classic');
   return (
@@ -33,7 +32,7 @@ const OptionsModal = ({setModalVisible, modalVisible, setOption, placeholder, in
                 <TextInput
                   style={styles.inputBox}
                   onEndEditing={(e) => {setTempLabel(e.nativeEvent.text)}}
-                  placeholder={placeholder}/>
+                  placeholder={"Home Arrival"}/>
 
                 <TouchableOpacity
                   style={styles.saveButton}

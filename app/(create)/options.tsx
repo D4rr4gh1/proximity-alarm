@@ -61,7 +61,6 @@ function OptionsScreen() {
             setModalVisible={setAlarmModalVisible}
             modalVisible={alarmModalVisible}
             setOption={setAlarmSound}
-            placeholder={alarmSound}
             inputType='Select'
           />
 
@@ -69,7 +68,6 @@ function OptionsScreen() {
             setModalVisible={setLabelModalVisible}
             modalVisible={labelModalVisible}
             setOption={setLabel}
-            placeholder={label}
             inputType='Type'
           />
           
