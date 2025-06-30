@@ -1,8 +1,9 @@
+import useAudioSetup from '@/hooks/useAudioSetup';
 import DBContextProvider from '@/hooks/useDBContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 import { Stack } from "expo-router";
-import { useEffect, useState } from "react";
+import { Text, useEffect, useState } from "react";
 const LOCATION_TASK_NAME = 'background-location-task';
 
 // TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
@@ -19,6 +20,10 @@ const LOCATION_TASK_NAME = 'background-location-task';
 
 export default function RootLayout() {
   const [foregroundStatus, setForegroundStatus] = useState<Location.LocationObject | null>(null);
+  const { isConfigured, error } = useAudioSetup()
+
+
+  if(error) return <Text>Error: {error.message}</Text>
 
   useEffect( () => {
 
