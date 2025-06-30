@@ -2,6 +2,9 @@ import BackArrow from '@/components/BackArrow';
 import { LatLong } from '@/types/shared';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Slider from '@react-native-community/slider';
+import MaskedView from '@react-native-masked-view/masked-view';
+import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -46,13 +49,16 @@ function ProximityScreen() {
       <View style={styles.container}>
         <MapView style = {{ 
                     width: '100%',
-                    height: '100%',
+                    height: '80%',
+                    top: 0,
+                    position: 'absolute'
                 }}
+                userInterfaceStyle='dark'
                 initialRegion={{
                     latitude: pinLocation.current.lat,
                     longitude: pinLocation.current.long,
-                    latitudeDelta: 0.0322,
-                    longitudeDelta: 0.0221,
+                    latitudeDelta: 0.0522,
+                    longitudeDelta: 0.0421,
                 }}>
 
             <Marker
@@ -62,11 +68,24 @@ function ProximityScreen() {
             <Circle 
                 center={{latitude: pinLocation.current.lat, longitude: pinLocation.current.long}}
                 radius={alarmRadius}
-                strokeColor='#30cbfc'
+                strokeColor='rgba(255, 255, 255, 0.7)'
                 fillColor='rgba(192, 236, 250, 0.5)'>
             </Circle>
         </MapView>
-        <BackArrow/>
+        <MaskedView style={{position: 'absolute', height: "50%", width: '100%', top: 0}}
+          maskElement={
+            <LinearGradient
+              colors={['black', 'transparent']}
+              style={{flex: 1}}
+            />
+          }
+          pointerEvents='none'>
+          <BlurView intensity={1} style={{flex: 1, backgroundColor: 'rgba(0, 0, 0, 1)'}} />
+        </MaskedView>
+        <BackArrow arrowColor='white'/>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Set Proximity</Text>
+        </View>
         <View style={{backgroundColor: 'white',
           borderRadius: 30,
           position: 'absolute',
@@ -125,6 +144,17 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 20,
     },
+    header: {
+      position: 'absolute',
+      left: '15%',
+      top: '5%'
+    },
+    headerText: {
+      fontSize: 36,
+      fontWeight: 'bold',
+      color: 'white'
+    },
+    
 });
 
 export default ProximityScreen

@@ -3,7 +3,8 @@ import DBContextProvider from '@/hooks/useDBContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 import { Stack } from "expo-router";
-import { Text, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { Text } from 'react-native';
 const LOCATION_TASK_NAME = 'background-location-task';
 
 // TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {

@@ -1,15 +1,26 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
-const BackArrow = () => {
+interface BackArrowProps {
+    arrowColor: string
+}
+
+
+const BackArrow = ({arrowColor} : BackArrowProps) => {
     const handlePress = async () => {
 
         const coords = await AsyncStorage.getItem('COORDS');
+        const radius = await AsyncStorage.getItem("RADIUS");
         if (coords) {
-            AsyncStorage.removeItem('COORDS')
+            await AsyncStorage.removeItem('COORDS')
             console.log("Coords Deleted")
+        }
+        if (radius) {
+            await AsyncStorage.removeItem('RADIUS')
+            console.log("Radius Deleted")
         }
         router.back()
     }
@@ -19,9 +30,7 @@ const BackArrow = () => {
     <TouchableOpacity
     onPress={handlePress}
     style={styles.arrow}>
-        <Image 
-        source={require("@/assets/images/ArrowLeft.png")}
-        style={styles.image} />
+        <Ionicons name="arrow-back" size={32} color={arrowColor}/>
     </TouchableOpacity>
   )
 }
@@ -29,13 +38,9 @@ const BackArrow = () => {
 const styles = StyleSheet.create({
     arrow: {
         position: 'absolute',
-        top: '7%',
-        left: '2%'
+        top: '5.8%',
+        left: '3%'
     },
-    image: {
-        height: 60,
-        width: 60
-    }
 })
 
 export default BackArrow

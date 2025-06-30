@@ -1,3 +1,4 @@
+import BackArrow from '@/components/BackArrow';
 import OptionsModal from '@/components/OptionsModal';
 import { useDBContext } from '@/contexts/context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -55,9 +56,7 @@ function OptionsScreen() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollArea} contentContainerStyle={styles.contentContainer}>
-        <Text style={styles.header}>Set Alarm Options</Text>
-        
+        <ScrollView style={styles.scrollArea} contentContainerStyle={styles.contentContainer}>
           <OptionsModal
             setModalVisible={setAlarmModalVisible}
             modalVisible={alarmModalVisible}
@@ -117,6 +116,11 @@ function OptionsScreen() {
         </TouchableOpacity>
       </ScrollView>
 
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Set Alarm Options</Text>
+      </View>
+      <BackArrow arrowColor='black'/>
+
       {/* Save Button */}
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
         <Text style={styles.saveButtonText}>Save</Text>
@@ -134,16 +138,22 @@ const styles = StyleSheet.create({
   },
   scrollArea: {
     flex: 1,
+    paddingTop: 20
   },
   contentContainer: {
     padding: 20,
   },
-  header: {
-    fontSize: 22,
-    fontWeight: '600',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
+    header: {
+      position: 'absolute',
+      left: '15%',
+      top: '5%',
+      backgroundColor: 'white'
+    },
+    headerText: {
+      fontSize: 36,
+      fontWeight: 'bold',
+      color: 'black'
+    },
   optionRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
