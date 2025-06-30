@@ -4,18 +4,21 @@ import { getDistanceInMeters } from '@/utils/calcDistance';
 import { useAudioPlayer } from 'expo-audio';
 import * as Location from 'expo-location';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ViewProps } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, Vibration, View, ViewProps } from 'react-native';
 import RingIndicator from './RingIndicator';
 
 interface AlarmItemProps extends ViewProps{
     alarm: Alarm
     location: Location.LocationObject
 }
-
+const PATTERN = [
+    0,
+    1000,
+]
 
 const AlarmItem = ({ alarm, location }: AlarmItemProps) => {
     const player = useAudioPlayer(alarmSounds[alarm.sound]);
-
+    console.log('vibrater: ', alarm.vibrate);
 
     const parsed = JSON.parse(alarm.coords);
     console.log('Loaded pin location:', parsed['lat']);
@@ -29,9 +32,16 @@ const AlarmItem = ({ alarm, location }: AlarmItemProps) => {
     
     
     const handleRing = () => {
-        player.seekTo(0);
+        player.loop = true;
         player.play();
+        Vibration.vibrate(PATTERN, true);
 
+    }
+
+    const handleCancel = () => {
+        Vibration.cancel();
+        player.pause();
+        player.loop = false;
     }
 
 
@@ -44,7 +54,10 @@ const AlarmItem = ({ alarm, location }: AlarmItemProps) => {
                 <Text>Distance: {distance}m</Text>
             </View>
             <TouchableOpacity onPress={handleRing}>
-                <Text>TEST SOUND</Text>
+                <Text>Turn On</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleCancel}>
+                <Text>Turn Off</Text>
             </TouchableOpacity>
         </View>
     </View>
