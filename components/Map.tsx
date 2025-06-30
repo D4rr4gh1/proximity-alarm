@@ -1,5 +1,5 @@
 import { LatLong } from '@/types/shared';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Platform, StyleSheet, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
@@ -10,6 +10,7 @@ interface Props {
 
 
 const Map = ({setPinLocation, pinLocation} : Props) => {
+    const mapRef = useRef<MapView | null>(null)
 
     const handleCoordChange = (givenLat: number, givenLong: number) => {
         setPinLocation({
@@ -17,6 +18,24 @@ const Map = ({setPinLocation, pinLocation} : Props) => {
             long: givenLong,
         })
     }
+
+
+    useEffect(() => {
+
+        if(pinLocation){
+            const newRegion = {
+                latitude: pinLocation.lat,
+                longitude: pinLocation.long,
+                latitudeDelta: 0.0322,
+                longitudeDelta: 0.0221
+            }
+
+        if (mapRef.current) {
+            mapRef.current.animateToRegion(newRegion, 500);
+        }
+    }
+
+    }, [pinLocation])
     
     if (Platform.OS === 'web') {
         return <Text>Map not Supported on web</Text>
@@ -30,13 +49,8 @@ const Map = ({setPinLocation, pinLocation} : Props) => {
                     height: '100%',
                 }}
                 userInterfaceStyle='dark'
+                ref={mapRef}
                 initialRegion={{
-                    latitude: pinLocation.lat,
-                    longitude: pinLocation.long,
-                    latitudeDelta: 0.0322,
-                    longitudeDelta: 0.0221,
-                }}
-                region={{
                     latitude: pinLocation.lat,
                     longitude: pinLocation.long,
                     latitudeDelta: 0.0322,

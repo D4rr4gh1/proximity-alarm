@@ -11,6 +11,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import MapView, { Circle, Marker } from 'react-native-maps';
 
 function ProximityScreen() {
+  const mapRef = useRef<MapView | null>(null)
   const pinLocation = useRef<LatLong>({lat: 0.0, long: 0.0})
   const [alarmRadius, setAlarmRadius] = useState(1000)
   const [ready, setReady] = useState(false);
@@ -34,6 +35,22 @@ function ProximityScreen() {
     getSavedLoc();
   }, []);
 
+
+  useEffect(() => {
+
+    const newRegion = {latitude: pinLocation.current.lat,
+          longitude: pinLocation.current.long,
+          latitudeDelta: (alarmRadius / 111000) * 5,
+          longitudeDelta: (alarmRadius / 111000) * 5
+      }
+
+     if (mapRef.current) {
+      mapRef.current.animateToRegion(newRegion, 300);
+    }
+
+  },[alarmRadius])
+
+
   const handlePress = async () => {
     await AsyncStorage.setItem('RADIUS', String(alarmRadius));
     router.push('/options')
@@ -54,11 +71,11 @@ function ProximityScreen() {
                     position: 'absolute'
                 }}
                 userInterfaceStyle='dark'
-                initialRegion={{
-                    latitude: pinLocation.current.lat,
+                ref={mapRef}
+                initialRegion={{latitude: pinLocation.current.lat,
                     longitude: pinLocation.current.long,
                     latitudeDelta: 0.0522,
-                    longitudeDelta: 0.0421,
+                    longitudeDelta: 0.0421
                 }}>
 
             <Marker
