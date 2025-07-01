@@ -1,9 +1,7 @@
+import { Alarm } from '@/types/shared';
 import * as SQLite from 'expo-sqlite';
-import { ReactNode, useEffect, useState } from "react";
-import { Alarm, DBContext } from "../contexts/context";
-
-
-import React from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { DBContext } from "../contexts/context";
 
 interface DBProviderProps {
   children: ReactNode;
@@ -87,8 +85,25 @@ function DBContextProvider({children} : DBProviderProps) {
         }
     }
 
+    const getAlarm = async (id: number) => {
+        try{
+            const result = await db.getFirstAsync(`SELECT * FROM alarms WHERE id = ?`, id)
+
+            if(result && typeof result === 'object'){
+                try{                 
+                    const alarm = result as Alarm;
+                    return alarm
+                }catch (e){
+                    console.error('Invalid JSON format');
+                }
+            }
+        } catch (e) {
+            console.error("Error when fetching alarm: ", e);
+        }
+    }
+
   return (
-    <DBContext.Provider value={{alarms, addAlarm, fetchAlarms, deleteAlarm, turnAlarmOff, dbVersion}}>
+    <DBContext.Provider value={{alarms, addAlarm, fetchAlarms, deleteAlarm, turnAlarmOff, dbVersion, getAlarm}}>
         {children}
     </DBContext.Provider>
   )

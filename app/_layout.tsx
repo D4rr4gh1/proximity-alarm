@@ -1,3 +1,4 @@
+import AudioPlayerProvider from '@/hooks/useAlarmController';
 import useAudioSetup from '@/hooks/useAudioSetup';
 import DBContextProvider from '@/hooks/useDBContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -64,9 +65,12 @@ export default function RootLayout() {
   }, []);
   return(
     <DBContextProvider>
-      <Stack screenOptions={{ headerShown: false}}>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-      </Stack>
+      <AudioPlayerProvider>
+        <Stack screenOptions={{ headerShown: false}}>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="ringing" options={{ headerShown: false }}/>
+        </Stack>
+      </AudioPlayerProvider>
     </DBContextProvider>
 
   );

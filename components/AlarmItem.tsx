@@ -1,27 +1,22 @@
-import { alarmSounds } from '@/assets/alarmsounds';
-import { Alarm } from '@/contexts/context';
+import { useSharedAudioPlayer } from '@/contexts/alarmContext';
+import { useDBContext } from '@/contexts/context';
+import { Alarm } from '@/types/shared';
 import { getDistanceInMeters } from '@/utils/calcDistance';
-import { useAudioPlayer } from 'expo-audio';
 import * as Location from 'expo-location';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, Vibration, View, ViewProps } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ViewProps } from 'react-native';
 import RingIndicator from './RingIndicator';
 
 interface AlarmItemProps extends ViewProps{
     alarm: Alarm
     location: Location.LocationObject
 }
-const PATTERN = [
-    0,
-    1000,
-]
 
 const AlarmItem = ({ alarm, location }: AlarmItemProps) => {
-    const player = useAudioPlayer(alarmSounds[alarm.sound]);
-    console.log('vibrater: ', alarm.vibrate);
+    const db = useDBContext()
+    const {startAlarm, stopAlarm} = useSharedAudioPlayer()
 
     const parsed = JSON.parse(alarm.coords);
-    console.log('Loaded pin location:', parsed['lat']);
 
     const distance = getDistanceInMeters(
         location.coords.latitude,
@@ -29,21 +24,6 @@ const AlarmItem = ({ alarm, location }: AlarmItemProps) => {
         parsed['lat'],
         parsed['long']
         );
-    
-    
-    const handleRing = () => {
-        player.loop = true;
-        player.play();
-        Vibration.vibrate(PATTERN, true);
-
-    }
-
-    const handleCancel = () => {
-        Vibration.cancel();
-        player.pause();
-        player.loop = false;
-    }
-
 
   return (
     <View style={styles.buttonContainer}>
@@ -53,10 +33,10 @@ const AlarmItem = ({ alarm, location }: AlarmItemProps) => {
                 <Text style={alarm.active ? styles.activeText : styles.buttonText}>{alarm.label}</Text>
                 <Text>Distance: {distance}m</Text>
             </View>
-            <TouchableOpacity onPress={handleRing}>
+            <TouchableOpacity onPress={() => startAlarm(alarm.id)}>
                 <Text>Turn On</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleCancel}>
+            <TouchableOpacity onPress={stopAlarm}>
                 <Text>Turn Off</Text>
             </TouchableOpacity>
         </View>
