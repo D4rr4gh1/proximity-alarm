@@ -3,6 +3,7 @@ import { useDBContext } from '@/contexts/context';
 import { Alarm } from '@/types/shared';
 import { getDistanceInMeters } from '@/utils/calcDistance';
 import * as Location from 'expo-location';
+import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, ViewProps } from 'react-native';
 import RingIndicator from './RingIndicator';
@@ -14,7 +15,7 @@ interface AlarmItemProps extends ViewProps{
 
 const AlarmItem = ({ alarm, location }: AlarmItemProps) => {
     const db = useDBContext()
-    const {startAlarm, stopAlarm} = useSharedAudioPlayer()
+    const {startAlarm, stopAlarm, alarmRinging} = useSharedAudioPlayer()
 
     const parsed = JSON.parse(alarm.coords);
 
@@ -33,7 +34,7 @@ const AlarmItem = ({ alarm, location }: AlarmItemProps) => {
                 <Text style={alarm.active ? styles.activeText : styles.buttonText}>{alarm.label}</Text>
                 <Text>Distance: {distance}m</Text>
             </View>
-            <TouchableOpacity onPress={() => startAlarm(alarm.id)}>
+            <TouchableOpacity onPress={() => { startAlarm(alarm.id); router.push('/ringing') }}>
                 <Text>Turn On</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={stopAlarm}>

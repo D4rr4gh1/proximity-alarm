@@ -1,8 +1,9 @@
 import { alarmSounds } from '@/assets/alarmsounds';
 import { AudioPlayerContext } from '@/contexts/alarmContext';
 import { useDBContext } from '@/contexts/context';
+import { Alarm } from '@/types/shared';
 import { useAudioPlayer } from 'expo-audio';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { Vibration } from 'react-native';
 
 interface AudioContextProps {
@@ -10,13 +11,13 @@ interface AudioContextProps {
 }
 
 const PATTERN = [
-    0,
     1000
 ]
 
 export const AudioPlayerProvider = ({ children }: AudioContextProps) => {
   const audioPlayer = useAudioPlayer(null);
   const db = useDBContext();
+  const [alarmRinging, setAlarmRinging] = useState<Alarm | null>(null) 
 
   const startAlarm = async (id: number) => {
     const result = await db.getAlarm(id)
@@ -27,16 +28,19 @@ export const AudioPlayerProvider = ({ children }: AudioContextProps) => {
     audioPlayer.loop = true;
     audioPlayer.play();
     Vibration.vibrate(PATTERN, true);
+
+    setAlarmRinging(result);
   }
 
   const stopAlarm = () => {
     Vibration.cancel();
     audioPlayer.pause()
     audioPlayer.loop = false;
+    setAlarmRinging(null);
   }
 
   return (
-    <AudioPlayerContext.Provider value={{startAlarm, stopAlarm}}>
+    <AudioPlayerContext.Provider value={{startAlarm, stopAlarm, alarmRinging}}>
       {children}
     </AudioPlayerContext.Provider>
   );
