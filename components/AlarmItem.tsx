@@ -1,30 +1,36 @@
 import { useSharedAudioPlayer } from '@/contexts/alarmContext';
-import { useDBContext } from '@/contexts/context';
+import { useLocation } from '@/hooks/useLocation';
 import { Alarm } from '@/types/shared';
 import { getDistanceInMeters } from '@/utils/calcDistance';
-import * as Location from 'expo-location';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, ViewProps } from 'react-native';
 import RingIndicator from './RingIndicator';
 
 interface AlarmItemProps extends ViewProps{
     alarm: Alarm
-    location: Location.LocationObject
 }
 
-const AlarmItem = ({ alarm, location }: AlarmItemProps) => {
-    const db = useDBContext()
-    const {startAlarm, stopAlarm, alarmRinging} = useSharedAudioPlayer()
+const AlarmItem = ({ alarm }: AlarmItemProps) => {
+    const {startAlarm, stopAlarm} = useSharedAudioPlayer()
+    const [distance, setDistance] = useState(0);
+    const {location, errorMsg} = useLocation();
 
     const parsed = JSON.parse(alarm.coords);
 
-    const distance = getDistanceInMeters(
-        location.coords.latitude,
-        location.coords.longitude,
-        parsed['lat'],
-        parsed['long']
+    useEffect(() => {
+
+        if(!location) return;
+        if(errorMsg) return;
+        const calcDistance = getDistanceInMeters(
+            location.coords.latitude,
+            location.coords.longitude,
+            parsed['lat'],
+            parsed['long']
         );
+
+        setDistance(calcDistance);
+    })
 
   return (
     <View style={styles.buttonContainer}>

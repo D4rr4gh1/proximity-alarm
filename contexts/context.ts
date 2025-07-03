@@ -1,7 +1,7 @@
 import { Alarm } from '@/types/shared';
 import { createContext, useContext } from 'react';
 
-interface DBContextType {
+export interface DBContextType {
     alarms: Alarm[];
     addAlarm: (sound: string,
     label: string,
@@ -14,6 +14,8 @@ interface DBContextType {
     turnAlarmOff: (id: number, flip: boolean) => void;
     dbVersion: number;
     getAlarm: (id: number) => Promise<Alarm | undefined>;
+    setRingingAlarm: (id: number | null) => void;
+    newAlarmRinging: number | null;
 
 }
 

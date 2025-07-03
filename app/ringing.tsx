@@ -1,4 +1,5 @@
 import { useSharedAudioPlayer } from '@/contexts/alarmContext';
+import { useDBContext } from '@/contexts/context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
 import React from 'react';
@@ -6,10 +7,15 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 const RingScreen = () => {
     const {stopAlarm, alarmRinging} = useSharedAudioPlayer();
+    const db = useDBContext();
 
     const handleStop = () => {
         stopAlarm();
-        router.push('/')
+        db.setRingingAlarm(null);
+        router.push({
+            pathname: "/",
+            params: { alarmHandled: "true" }, // must be a string
+        });
     }
 
     return (

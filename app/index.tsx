@@ -3,23 +3,84 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import AlarmItem from '@/components/AlarmItem';
 
+import { useSharedAudioPlayer } from '@/contexts/alarmContext';
 import { useDBContext } from '@/contexts/context';
 import { useLocation } from '@/hooks/useLocation';
+import { Alarm } from '@/types/shared';
+import * as Location from 'expo-location';
+import { LocationRegion } from 'expo-location';
 import { router } from 'expo-router';
-import { useEffect } from 'react';
+import * as TaskManager from 'expo-task-manager';
+import { useEffect, useRef, useState } from 'react';
+import { GEOFENCE_TASK } from './_layout';
 
 
 export default function HomeScreen() {
   const { location, errorMsg } = useLocation();
+  const [regionArray, setRegionArray] = useState<LocationRegion[]>([])
   const db = useDBContext();
+  const [distance, setDistance] = useState(0);
+  const {startAlarm, stopAlarm} = useSharedAudioPlayer();
+  const [hasHandledAlarm, setHasHandledAlarm] = useState(false);
+  const previousRegionsRef = useRef<string | null>(null);
+  
+
+  // Enable below for notification perms
+
+  // const notificationPermissions = async () => {
+  //   await notifee.requestPermission();
+  // }
+
+  // useEffect(() => {
+  //   notificationPermissions();
+  // }, [])
+
 
   useEffect(() => {
     db.fetchAlarms();
-  }, [db.dbVersion])
+  }, [])
 
-  if (errorMsg) return <Text>Error: {errorMsg}</Text>;
-  if (!location) return <Text>Loading...</Text>;
-  console.log("LOADED HOME")
+  useEffect(() => {
+
+    const alarmToRegionMap: LocationRegion[] = db.alarms.map((alarm: Alarm): LocationRegion => {
+
+      const coords = JSON.parse(alarm.coords);
+
+      return {
+        identifier: alarm.id.toString(),
+        latitude: coords['lat'],
+        longitude: coords['long'],
+        radius: alarm.radius,
+      }
+    })
+
+    const setupGeofencing = async () => {
+      if (!regionArray || regionArray.length === 0) return;
+
+      const isRegistered = await TaskManager.isTaskRegisteredAsync(GEOFENCE_TASK);
+      if (isRegistered) {
+        await Location.stopGeofencingAsync(GEOFENCE_TASK);
+      }
+      await Location.startGeofencingAsync(GEOFENCE_TASK, alarmToRegionMap);
+    };
+
+    setupGeofencing();
+  }, [db.alarms]);
+
+
+  useEffect(() => {
+    if(db.newAlarmRinging){
+      startAlarm(db.newAlarmRinging);
+      db.setRingingAlarm(null);
+      router.push('/ringing');
+      return;
+    }
+
+    stopAlarm();
+  }, [db.newAlarmRinging])
+
+
+  //console.log("LOADED HOME")
 
   return (
     <SafeAreaProvider>
@@ -31,7 +92,7 @@ export default function HomeScreen() {
             </TouchableOpacity>
             <ScrollView contentContainerStyle={{alignItems: 'center'}} style={styles.itemsContainer}>
               {db.alarms.map((alarm) => (
-                <AlarmItem key={alarm.id} alarm={alarm} location={location}/>
+                <AlarmItem key={alarm.id} alarm={alarm}/>
               ))}
             </ScrollView>
         </SafeAreaView>

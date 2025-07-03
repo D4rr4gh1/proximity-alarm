@@ -1,5 +1,5 @@
 import { alarmSounds } from '@/assets/alarmsounds';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import React, { SetStateAction, useState } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';

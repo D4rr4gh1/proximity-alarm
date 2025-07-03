@@ -1,40 +1,52 @@
 import AudioPlayerProvider from '@/hooks/useAlarmController';
-import useAudioSetup from '@/hooks/useAudioSetup';
 import DBContextProvider from '@/hooks/useDBContext';
+import { getDB } from '@/services/audioPlayerBridge';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 import { Stack } from "expo-router";
+import * as TaskManager from 'expo-task-manager';
 import { useEffect, useState } from "react";
-import { Text } from 'react-native';
-const GEOFENCE_TASK = 'geofence-task';
+export const GEOFENCE_TASK = 'geofence-task';
+const triggeredRegions = new Set<string>();
 
-// TaskManager.defineTask(GEOFENCE_TASK, async ({ data , error }: TaskManager.TaskManagerTaskBody) => {
-//   if (error) {
-//     console.error('Geofence task error:', error);
-//     return;
-//   }
+TaskManager.defineTask(GEOFENCE_TASK, async ({ data , error }: TaskManager.TaskManagerTaskBody) => {
+  if (error) {
+    console.error('Geofence task error:', error);
+    return;
+  }
 
-//   const { eventType, region } = data as {
-//     eventType: Location.GeofencingEventType;
-//     region: Location.LocationRegion;
-//   };
+  const { eventType, region } = data as {
+    eventType: Location.GeofencingEventType;
+    region: Location.LocationRegion;
+  };
 
-//   if (eventType === Location.GeofencingEventType.Enter) {
-//     console.log('Entered region:', region.identifier);
-//     // Trigger alarm or notification here
-//   } else if (eventType === Location.GeofencingEventType.Exit) {
-//     console.log('Exited region:', region.identifier);
-//   }
-// });
+  const db = getDB();
+  const regionId = region.identifier ? region.identifier : ""; // Maybe add some error handling here
+
+  if (eventType === Location.GeofencingEventType.Enter) {
+      if (triggeredRegions.has(regionId)) {
+      console.log(`Already inside region ${regionId}, skipping alarm trigger`);
+      return;
+    }
+
+    console.log(`ENTER region: ${regionId}`);
+    triggeredRegions.add(regionId);
+    if(!region.identifier) return; 
+    db?.setRingingAlarm(parseInt(region.identifier));
+  } 
+  
+  else if (eventType === Location.GeofencingEventType.Exit) {
+    console.log(`EXIT region: ${regionId}`);
+    triggeredRegions.delete(regionId);
+    db?.setRingingAlarm(null)
+  }
+});
 
 
 
 export default function RootLayout() {
   const [foregroundStatus, setForegroundStatus] = useState<Location.LocationObject | null>(null);
-  const { isConfigured, error } = useAudioSetup()
 
-
-  if(error) return <Text>Error: {error.message}</Text>
 
   useEffect( () => {
 
@@ -52,12 +64,13 @@ export default function RootLayout() {
         const { status: foregroundStatus } = await Location.requestForegroundPermissionsAsync();
         if (foregroundStatus !== 'granted') return;
 
-        // const { status: backgroundStatus } = await Location.requestBackgroundPermissionsAsync();
-        // if (backgroundStatus !== 'granted') return;
+        const { status: backgroundStatus } = await Location.requestBackgroundPermissionsAsync();
+        if (backgroundStatus !== 'granted') return;
         
       } catch(err) {
         console.error('Failed to set up background tracking:', err);
       }
+
   };
   
   startBackgroundTask()

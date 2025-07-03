@@ -11,6 +11,7 @@ function DBContextProvider({children} : DBProviderProps) {
     const [alarms, setAlarms] = useState<Alarm[]>([])
     const [db, setDB] = useState<SQLite.SQLiteDatabase | null>(null)
     const [dbVersion, setDBVersion] = useState(0);
+    const [newAlarmRinging, setNewAlarmRinging] = useState<number | null>(null);
 
 
     useEffect(() => {
@@ -102,8 +103,12 @@ function DBContextProvider({children} : DBProviderProps) {
         }
     }
 
+    const setRingingAlarm = (id: number | null) => {
+        setNewAlarmRinging(id);
+    }
+
   return (
-    <DBContext.Provider value={{alarms, addAlarm, fetchAlarms, deleteAlarm, turnAlarmOff, dbVersion, getAlarm}}>
+    <DBContext.Provider value={{alarms, addAlarm, fetchAlarms, deleteAlarm, turnAlarmOff, dbVersion, getAlarm, setRingingAlarm, newAlarmRinging}}>
         {children}
     </DBContext.Provider>
   )

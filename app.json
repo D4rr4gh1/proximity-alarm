@@ -26,7 +26,12 @@
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
+      "package": "com.d4rr4gh.proximityalarm"
     },
     "web": {
       "bundler": "metro",
@@ -34,17 +39,9 @@
     },
     "plugins": [
       "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ],
       "expo-sqlite",
-      "expo-audio"
+      "expo-audio",
+      "expo-dev-client"
     ],
     "experiments": {
       "typedRoutes": true
