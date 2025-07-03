@@ -1,6 +1,6 @@
 import AudioPlayerProvider from '@/hooks/useAlarmController';
 import DBContextProvider from '@/hooks/useDBContext';
-import { getDB } from '@/services/audioPlayerBridge';
+import { getDB } from '@/services/databaseBridge';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 import { Stack } from "expo-router";

@@ -26,7 +26,7 @@ function DBContextProvider({children} : DBProviderProps) {
         };
         setupDB()
     }, []);
-
+    
     const setupTables = async (db: SQLite.SQLiteDatabase) => {
         try{
             await db.execAsync(`CREATE TABLE IF NOT EXISTS alarms(

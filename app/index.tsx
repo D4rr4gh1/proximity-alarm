@@ -11,7 +11,7 @@ import * as Location from 'expo-location';
 import { LocationRegion } from 'expo-location';
 import { router } from 'expo-router';
 import * as TaskManager from 'expo-task-manager';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GEOFENCE_TASK } from './_layout';
 
 
@@ -21,8 +21,6 @@ export default function HomeScreen() {
   const db = useDBContext();
   const [distance, setDistance] = useState(0);
   const {startAlarm, stopAlarm} = useSharedAudioPlayer();
-  const [hasHandledAlarm, setHasHandledAlarm] = useState(false);
-  const previousRegionsRef = useRef<string | null>(null);
   
 
   // Enable below for notification perms
@@ -80,7 +78,7 @@ export default function HomeScreen() {
   }, [db.newAlarmRinging])
 
 
-  //console.log("LOADED HOME")
+  console.log("LOADED HOME")
 
   return (
     <SafeAreaProvider>

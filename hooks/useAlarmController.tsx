@@ -1,7 +1,7 @@
 import { alarmSounds } from '@/assets/alarmsounds';
 import { AudioPlayerContext } from '@/contexts/alarmContext';
 import { useDBContext } from '@/contexts/context';
-import { setAudioPlayerInstance } from '@/services/audioPlayerBridge';
+import { setDBInstance } from '@/services/databaseBridge';
 import { Alarm } from '@/types/shared';
 import { useAudioPlayer } from 'expo-audio';
 import { ReactNode, useEffect, useState } from 'react';
@@ -21,8 +21,8 @@ export const AudioPlayerProvider = ({ children }: AudioContextProps) => {
   const [alarmRinging, setAlarmRinging] = useState<Alarm | null>(null) 
 
   useEffect(() => {
-    setAudioPlayerInstance(audioPlayer, db);
-  }, [audioPlayer, db])
+    setDBInstance(db);
+  }, [db])
 
   const startAlarm = async (id: number) => {
     const result = await db.getAlarm(id)
