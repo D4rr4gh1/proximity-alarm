@@ -2,9 +2,8 @@ import { useSharedAudioPlayer } from '@/contexts/alarmContext';
 import { useLocation } from '@/hooks/useLocation';
 import { Alarm } from '@/types/shared';
 import { getDistanceInMeters } from '@/utils/calcDistance';
-import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ViewProps } from 'react-native';
+import { StyleSheet, Text, View, ViewProps } from 'react-native';
 import RingIndicator from './RingIndicator';
 
 interface AlarmItemProps extends ViewProps{
@@ -40,12 +39,6 @@ const AlarmItem = ({ alarm }: AlarmItemProps) => {
                 <Text style={alarm.active ? styles.activeText : styles.buttonText}>{alarm.label}</Text>
                 <Text>Distance: {distance}m</Text>
             </View>
-            <TouchableOpacity onPress={() => { startAlarm(alarm.id); router.push('/ringing') }}>
-                <Text>Turn On</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={stopAlarm}>
-                <Text>Turn Off</Text>
-            </TouchableOpacity>
         </View>
     </View>
   )

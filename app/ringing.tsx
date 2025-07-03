@@ -12,10 +12,7 @@ const RingScreen = () => {
     const handleStop = () => {
         stopAlarm();
         db.setRingingAlarm(null);
-        router.push({
-            pathname: "/",
-            params: { alarmHandled: "true" }, // must be a string
-        });
+        router.push('/');
     }
 
     return (
